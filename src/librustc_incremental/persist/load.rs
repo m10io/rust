@@ -39,8 +39,7 @@ impl LoadResult<(PreviousDepGraph, WorkProductMap)> {
             }
             LoadResult::DataOutOfDate => {
                 if let Err(err) = delete_all_session_dir_contents(sess) {
-                    sess.err(&format!(
-                        "Failed to delete invalidated or incompatible \
+                    sess.warn(&format!("Failed to delete invalidated or incompatible \
                                       incremental compilation session directory contents `{}`: {}.",
                         dep_graph_path(sess).display(),
                         err
