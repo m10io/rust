@@ -119,6 +119,22 @@ where
         }
     }
 
+    let folder_path = path_buf.parent().unwrap();
+
+    if !folder_path.exists() {
+        match fs::create_dir_all(&folder_path) {
+            Ok(()) => {
+                debug!("save: created new dep-graph folder");
+            }
+            Err(err) => {
+                sess.warn(&format!("failed to create missing directory for dep-graph `{}`: {}",
+                                   path_buf.display(),
+                                   err));
+                return;
+            }
+        }
+    }
+
     // generate the data in a memory buffer
     let mut encoder = Encoder::new(Vec::new());
     file_format::write_file_header(&mut encoder);
